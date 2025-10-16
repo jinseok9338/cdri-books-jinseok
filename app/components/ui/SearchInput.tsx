@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import useRecentSearch from "~/stores/searchQueryStore";
 import searchIcon from "~/assets/icons/search.svg";
 import closeIcon from "~/assets/icons/close.svg";
@@ -14,6 +14,7 @@ const SearchInput = ({
 }: SearchInputProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { recentSearch, addRecentSearch, removeRecentSearch } =
     useRecentSearch();
@@ -22,8 +23,10 @@ const SearchInput = ({
     if (query.trim()) {
       onSearch(query.trim());
       addRecentSearch(query.trim());
-      setInputValue("");
-      setIsFocused(false);
+      // setInputValue("");
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
     }
   };
 
@@ -52,11 +55,11 @@ const SearchInput = ({
   };
 
   return (
-    <div className="bg-[var(--color-light-gray)] rounded-[24px] p-4 w-[480px]">
-      {/* Input 영역 */}
+    <div className="bg-[var(--color-light-gray)] w-full rounded-[24px] p-4">
       <div className="flex items-center">
         <img src={searchIcon} alt="search" className="w-[30px] h-[30px] mr-3" />
         <input
+          ref={inputRef}
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -68,14 +71,14 @@ const SearchInput = ({
         />
       </div>
 
-      {/* 검색 기록 리스트 */}
       {isFocused && recentSearch.length > 0 && (
         <div className="mt-4 space-y-3">
           {recentSearch.map((item) => (
             <div
               key={item.timestamp}
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => handleHistoryClick(item.searchTerm)}
-              className="flex items-center justify-between text-[var(--color-typo-subtitle)] cursor-pointer hover:text-[var(--color-typo-primary)]"
+              className="flex pl-[35px] pr-[9px] items-center justify-between text-[var(--color-typo-subtitle)] cursor-pointer hover:text-[var(--color-typo-primary)]"
             >
               <span className="text-base">{item.searchTerm}</span>
               <button
