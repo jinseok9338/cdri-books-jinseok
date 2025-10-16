@@ -1,5 +1,5 @@
-import { Outlet } from "react-router";
 import type { Route } from "./+types/_main";
+import MainLayoutComponent from "~/components/layout/MainLayout";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,9 +9,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function MainLayout() {
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <MainLayoutComponent />;
 }
