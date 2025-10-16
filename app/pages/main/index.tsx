@@ -4,6 +4,8 @@ import SearchInput from "~/components/ui/SearchInput";
 import PopoverSearchForm, {
   type SearchTarget,
 } from "~/components/ui/PopoverSearchForm";
+import BookListItem from "~/components/BookListItem";
+import { mockBooks } from "~/components/MockBooks";
 
 const MainIndexPage = () => {
   const handleSearch = (query: string) => {
@@ -16,6 +18,11 @@ const MainIndexPage = () => {
     // TODO: 상세 검색 로직 구현
   };
 
+  const handleBuy = (book: any) => {
+    console.log("구매하기:", book.title);
+    // TODO: 구매 로직 구현
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-start">
@@ -23,6 +30,20 @@ const MainIndexPage = () => {
         <PopoverSearchForm onSearch={handleDetailSearch} />
       </div>
       <SearchInput onSearch={handleSearch} />
+
+      {/* 책 목록 예시 */}
+      <div className="space-y-4">
+        <Title2 className="text-[var(--color-typo-primary)]">
+          책 목록 예시
+        </Title2>
+        <div className="w-full">
+          <div>
+            {mockBooks.map((book) => (
+              <BookListItem key={book.isbn} book={book} onBuy={handleBuy} />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

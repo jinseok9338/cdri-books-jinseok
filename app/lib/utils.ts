@@ -12,3 +12,7 @@ export const getENV = (env: keyof ImportMetaEnv): string | undefined => {
 export const isClient = () => {
   return typeof window !== "undefined";
 };
+
+export const formatPrice = (price: number) => {
+  return `${price.toLocaleString()}원`;
+};
