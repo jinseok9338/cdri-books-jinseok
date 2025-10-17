@@ -18,24 +18,17 @@ const SearchFormArea = () => {
 
   return (
     <div className="w-full max-w-[568px] flex flex-col gap-4">
-      {/* 제목 */}
       <div className="h-[36px] flex items-center">
         <Title2 className="text-[var(--color-typo-primary)] text-[22px] font-bold leading-[24px]">
           도서 검색
         </Title2>
       </div>
 
-      {/* 검색 영역 */}
-      <div className="relative w-full">
-        {/* 검색 입력창 */}
-        <div className="w-[480px]">
+      <div className="flex items-center gap-4">
+        <div className="flex-1">
           <SearchInput />
         </div>
-
-        {/* 상세검색 버튼 */}
-        <div className="absolute top-[8px] right-0">
-          <PopoverSearchForm onSearch={handleDetailSearch} />
-        </div>
+        <PopoverSearchForm onSearch={handleDetailSearch} />
       </div>
     </div>
   );

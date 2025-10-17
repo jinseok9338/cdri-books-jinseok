@@ -9,7 +9,7 @@ export const useGetInfiniteBooks = (
   searchQuery: Omit<z.infer<typeof searchBooksSchema>, "page" | "size">
 ) => {
   return useInfiniteQuery({
-    queryKey: [GET_BOOKS_KEY],
+    queryKey: [GET_BOOKS_KEY, searchQuery],
     queryFn: ({ pageParam = 1 }) =>
       searchBooks({ ...searchQuery, page: pageParam, size: BOOKS_PER_PAGE }),
     getNextPageParam: (lastPage, pages) =>

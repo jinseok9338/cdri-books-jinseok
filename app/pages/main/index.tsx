@@ -12,7 +12,7 @@ import TitleArea from "./components/TitleArea";
 
 const MainIndexPage = () => {
   return (
-    <div className="flex flex-col items-center max-w-[960px] mx-auto">
+    <div className="flex flex-col max-w-[960px] mx-auto">
       <Padding height={80} />
       <SearchFormArea />
       <Padding height={24} />

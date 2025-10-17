@@ -44,7 +44,7 @@ export const searchBooks = async (
     throw new Error("Invalid search query");
   }
   try {
-    const response = await API.get("/search/book", {
+    const response = await API.get("search/book", {
       searchParams: {
         ...validatedQuery,
       },
