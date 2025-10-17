@@ -10,10 +10,9 @@ import { formatPrice } from "~/lib/utils";
 
 interface BookListItemProps {
   book: Document;
-  onBuy?: (book: Document) => void;
 }
 
-const BookListItem = ({ book, onBuy }: BookListItemProps) => {
+const BookListItem = ({ book }: BookListItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { isLiked, addLikeBook, removeLikeBook } = useLikeBooksStore();
   const liked = isLiked(book);
@@ -28,18 +27,10 @@ const BookListItem = ({ book, onBuy }: BookListItemProps) => {
   };
 
   const handleBuyClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onBuy) {
-      onBuy(book);
-    } else {
-      window.open(book.url, "_blank");
-    }
+    window.open(book.url, "_blank");
   };
 
-  // 예시 이미지 URL (실제로는 book.thumbnail 사용)
-  const thumbnailUrl =
-    book.thumbnail ||
-    "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1467038";
+  const thumbnailUrl = book.thumbnail;
 
   return (
     <div
@@ -49,11 +40,19 @@ const BookListItem = ({ book, onBuy }: BookListItemProps) => {
         // 닫힘 상태 - CompactView
         <div className="flex items-center w-full h-[100px] px-12 py-4 gap-6 transition-all duration-300 ease-in-out">
           {/* 책 이미지 */}
-          <img
-            src={thumbnailUrl}
-            alt={book.title}
-            className="w-12 h-[68px] object-cover rounded"
-          />
+          <div className="relative">
+            <img
+              src={thumbnailUrl}
+              alt={book.title}
+              className="w-12 h-[68px] object-cover rounded"
+            />
+
+            <img
+              src={liked ? heartFilledIcon : heartEmptyIcon}
+              alt="like"
+              className="absolute top-0 right-0 w-4 h-4 hover:scale-110 transition-transform"
+            />
+          </div>
 
           {/* 책 정보 */}
           <div className="flex items-center gap-4 flex-1">
@@ -191,9 +190,6 @@ const BookListItem = ({ book, onBuy }: BookListItemProps) => {
               </div>
             </div>
           </div>
-
-          {/* 하단 구분선 */}
-          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-[#D2D6DA]"></div>
         </div>
       )}
     </div>

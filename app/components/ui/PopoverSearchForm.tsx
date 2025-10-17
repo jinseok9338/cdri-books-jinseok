@@ -58,7 +58,7 @@ const PopoverSearchForm = ({ onSearch }: PopoverSearchFormProps) => {
           상세검색
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-[360px] p-0" align="end">
+      <PopoverContent className="w-[360px] p-0" align="center">
         <div className="relative bg-white rounded-lg shadow-lg p-6">
           <button
             onClick={handleClose}

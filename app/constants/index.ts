@@ -1,3 +1,5 @@
+import { QueryClient } from "@tanstack/react-query";
+
 export const BOOK_SEARCH_QUERY = {
   key: "bsq",
   defaultValue: {
