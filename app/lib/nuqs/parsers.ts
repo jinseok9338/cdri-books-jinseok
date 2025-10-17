@@ -4,207 +4,207 @@ import { safeParse } from "./utils";
 type Require<T, Keys extends keyof T> = Pick<Required<T>, Keys> & Omit<T, Keys>;
 
 export type Parser<T> = {
-	/**
-	 * Convert a query string value into a state value.
-	 *
-	 * If the string value does not represent a valid state value,
-	 * the parser should return `null`. Throwing an error is also supported.
-	 */
-	parse: (value: string) => T | null;
+  /**
+   * Convert a query string value into a state value.
+   *
+   * If the string value does not represent a valid state value,
+   * the parser should return `null`. Throwing an error is also supported.
+   */
+  parse: (value: string) => T | null;
 
-	/**
-	 * Render the state value into a query string value.
-	 */
-	serialize?: (value: T) => string;
+  /**
+   * Render the state value into a query string value.
+   */
+  serialize?: (value: T) => string;
 
-	/**
-	 * Check if two state values are equal.
-	 *
-	 * This is used when using the `clearOnDefault` value, to compare the default
-	 * value with the set value.
-	 *
-	 * It makes sense to provide this function when the state value is an object
-	 * or an array, as the default referential equality check will not work.
-	 */
-	eq?: (a: T, b: T) => boolean;
+  /**
+   * Check if two state values are equal.
+   *
+   * This is used when using the `clearOnDefault` value, to compare the default
+   * value with the set value.
+   *
+   * It makes sense to provide this function when the state value is an object
+   * or an array, as the default referential equality check will not work.
+   */
+  eq?: (a: T, b: T) => boolean;
 };
 
 export type ParserBuilder<T> = Required<Parser<T>> &
-	Options & {
-		/**
-		 * Set history type, shallow routing and scroll restoration options
-		 * at the hook declaration level.
-		 *
-		 * Note that you can override those options in individual calls to the
-		 * state updater function.
-		 */
-		withOptions<This>(this: This, options: Options): This;
+  Options & {
+    /**
+     * Set history type, shallow routing and scroll restoration options
+     * at the hook declaration level.
+     *
+     * Note that you can override those options in individual calls to the
+     * state updater function.
+     */
+    withOptions<This>(this: This, options: Options): This;
 
-		/**
-		 * Specifying a default value makes the hook state non-nullable when the
-		 * query is missing from the URL: the default value is returned instead
-		 * of `null`.
-		 *
-		 * Setting the state to the default value¹ will clear the query string key
-		 * from the URL, unless `clearOnDefault` is set to `false`.
-		 *
-		 * Setting the state to `null` will always clear the query string key
-		 * from the URL, and return the default value.
-		 *
-		 * ¹: Equality is checked with the parser's `eq` function, or referential
-		 * equality if not provided.
-		 *
-		 * @param defaultValue
-		 */
-		withDefault(
-			this: ParserBuilder<T>,
-			defaultValue: NonNullable<T>,
-		): Omit<ParserBuilder<T>, "parseServerSide"> & {
-			readonly defaultValue: NonNullable<T>;
+    /**
+     * Specifying a default value makes the hook state non-nullable when the
+     * query is missing from the URL: the default value is returned instead
+     * of `null`.
+     *
+     * Setting the state to the default value¹ will clear the query string key
+     * from the URL, unless `clearOnDefault` is set to `false`.
+     *
+     * Setting the state to `null` will always clear the query string key
+     * from the URL, and return the default value.
+     *
+     * ¹: Equality is checked with the parser's `eq` function, or referential
+     * equality if not provided.
+     *
+     * @param defaultValue
+     */
+    withDefault(
+      this: ParserBuilder<T>,
+      defaultValue: NonNullable<T>
+    ): Omit<ParserBuilder<T>, "parseServerSide"> & {
+      readonly defaultValue: NonNullable<T>;
 
-			/**
-			 * Use the parser in Server Components
-			 *
-			 * `parse` is intended to be used only by the hook, but you can use this
-			 * method to hydrate query values on server-side rendered pages.
-			 * See the `server-side-parsing` demo for an example.
-			 *
-			 * Note that when multiple queries are presented to the parser
-			 * (eg: `/?a=1&a=2`), only the **first** will be parsed, to mimic the
-			 * behaviour of URLSearchParams:
-			 * https://url.spec.whatwg.org/#dom-urlsearchparams-get
-			 *
-			 * @param value as coming from page props
-			 */
-			parseServerSide(value: string | string[] | undefined): NonNullable<T>;
-		};
+      /**
+       * Use the parser in Server Components
+       *
+       * `parse` is intended to be used only by the hook, but you can use this
+       * method to hydrate query values on server-side rendered pages.
+       * See the `server-side-parsing` demo for an example.
+       *
+       * Note that when multiple queries are presented to the parser
+       * (eg: `/?a=1&a=2`), only the **first** will be parsed, to mimic the
+       * behaviour of URLSearchParams:
+       * https://url.spec.whatwg.org/#dom-urlsearchparams-get
+       *
+       * @param value as coming from page props
+       */
+      parseServerSide(value: string | string[] | undefined): NonNullable<T>;
+    };
 
-		/**
-		 * Use the parser in Server Components
-		 *
-		 * `parse` is intended to be used only by the hook, but you can use this
-		 * method to hydrate query values on server-side rendered pages.
-		 * See the `server-side-parsing` demo for an example.
-		 *
-		 * Note that when multiple queries are presented to the parser
-		 * (eg: `/?a=1&a=2`), only the **first** will be parsed, to mimic the
-		 * behaviour of URLSearchParams:
-		 * https://url.spec.whatwg.org/#dom-urlsearchparams-get
-		 *
-		 * @param value as coming from page props
-		 */
-		parseServerSide(value: string | string[] | undefined): T | null;
-	};
+    /**
+     * Use the parser in Server Components
+     *
+     * `parse` is intended to be used only by the hook, but you can use this
+     * method to hydrate query values on server-side rendered pages.
+     * See the `server-side-parsing` demo for an example.
+     *
+     * Note that when multiple queries are presented to the parser
+     * (eg: `/?a=1&a=2`), only the **first** will be parsed, to mimic the
+     * behaviour of URLSearchParams:
+     * https://url.spec.whatwg.org/#dom-urlsearchparams-get
+     *
+     * @param value as coming from page props
+     */
+    parseServerSide(value: string | string[] | undefined): T | null;
+  };
 
 /**
  * Wrap a set of parse/serialize functions into a builder pattern parser
  * you can pass to one of the hooks, making its default value type safe.
  */
 export function createParser<T>(
-	parser: Require<Parser<T>, "parse" | "serialize">,
+  parser: Require<Parser<T>, "parse" | "serialize">
 ): ParserBuilder<T> {
-	function parseServerSideNullable(value: string | string[] | undefined) {
-		if (typeof value === "undefined") {
-			return null;
-		}
-		let str = "";
-		if (Array.isArray(value)) {
-			// Follow the spec:
-			// https://url.spec.whatwg.org/#dom-urlsearchparams-get
-			if (value[0] === undefined) {
-				return null;
-			}
-			str = value[0];
-		}
-		if (typeof value === "string") {
-			str = value;
-		}
-		return safeParse(parser.parse, str);
-	}
+  function parseServerSideNullable(value: string | string[] | undefined) {
+    if (typeof value === "undefined") {
+      return null;
+    }
+    let str = "";
+    if (Array.isArray(value)) {
+      // Follow the spec:
+      // https://url.spec.whatwg.org/#dom-urlsearchparams-get
+      if (value[0] === undefined) {
+        return null;
+      }
+      str = value[0];
+    }
+    if (typeof value === "string") {
+      str = value;
+    }
+    return safeParse(parser.parse, str);
+  }
 
-	return {
-		eq: (a, b) => a === b,
-		...parser,
-		parseServerSide: parseServerSideNullable,
-		withDefault(defaultValue) {
-			return {
-				...this,
-				defaultValue,
-				parseServerSide(value) {
-					return parseServerSideNullable(value) ?? defaultValue;
-				},
-			};
-		},
-		withOptions(options: Options) {
-			return {
-				...this,
-				...options,
-			};
-		},
-	};
+  return {
+    eq: (a, b) => a === b,
+    ...parser,
+    parseServerSide: parseServerSideNullable,
+    withDefault(defaultValue) {
+      return {
+        ...this,
+        defaultValue,
+        parseServerSide(value) {
+          return parseServerSideNullable(value) ?? defaultValue;
+        },
+      };
+    },
+    withOptions(options: Options) {
+      return {
+        ...this,
+        ...options,
+      };
+    },
+  };
 }
 
 // Parsers implementations -----------------------------------------------------
 
 export const parseAsString = createParser({
-	parse: (v) => v,
-	serialize: (v) => `${v}`,
+  parse: (v) => v,
+  serialize: (v) => `${v}`,
 });
 
 export const parseAsInteger = createParser({
-	parse: (v) => {
-		const int = parseInt(v);
-		if (Number.isNaN(int)) {
-			return null;
-		}
-		return int;
-	},
-	serialize: (v) => Math.round(v).toFixed(),
+  parse: (v) => {
+    const int = parseInt(v);
+    if (Number.isNaN(int)) {
+      return null;
+    }
+    return int;
+  },
+  serialize: (v) => Math.round(v).toFixed(),
 });
 
 export const parseAsIndex = createParser({
-	parse: (v) => {
-		const int = parseAsInteger.parse(v);
-		if (int === null) {
-			return null;
-		}
-		return int - 1;
-	},
-	serialize: (v) => parseAsInteger.serialize(v + 1),
+  parse: (v) => {
+    const int = parseAsInteger.parse(v);
+    if (int === null) {
+      return null;
+    }
+    return int - 1;
+  },
+  serialize: (v) => parseAsInteger.serialize(v + 1),
 });
 
 export const parseAsHex = createParser({
-	parse: (v) => {
-		const int = parseInt(v, 16);
-		if (Number.isNaN(int)) {
-			return null;
-		}
-		return int;
-	},
-	serialize: (v) => {
-		const hex = Math.round(v).toString(16);
-		return hex.padStart(hex.length + (hex.length % 2), "0");
-	},
+  parse: (v) => {
+    const int = parseInt(v, 16);
+    if (Number.isNaN(int)) {
+      return null;
+    }
+    return int;
+  },
+  serialize: (v) => {
+    const hex = Math.round(v).toString(16);
+    return hex.padStart(hex.length + (hex.length % 2), "0");
+  },
 });
 
 export const parseAsFloat = createParser({
-	parse: (v) => {
-		const float = parseFloat(v);
-		if (Number.isNaN(float)) {
-			return null;
-		}
-		return float;
-	},
-	serialize: (v) => v.toString(),
+  parse: (v) => {
+    const float = parseFloat(v);
+    if (Number.isNaN(float)) {
+      return null;
+    }
+    return float;
+  },
+  serialize: (v) => v.toString(),
 });
 
 export const parseAsBoolean = createParser({
-	parse: (v) => v === "true",
-	serialize: (v) => (v ? "true" : "false"),
+  parse: (v) => v === "true",
+  serialize: (v) => (v ? "true" : "false"),
 });
 
 function compareDates(a: Date, b: Date) {
-	return a.valueOf() === b.valueOf();
+  return a.valueOf() === b.valueOf();
 }
 
 /**
@@ -212,15 +212,15 @@ function compareDates(a: Date, b: Date) {
  * and returned as a Date object.
  */
 export const parseAsTimestamp = createParser({
-	parse: (v) => {
-		const ms = parseInt(v);
-		if (Number.isNaN(ms)) {
-			return null;
-		}
-		return new Date(ms);
-	},
-	serialize: (v: Date) => v.valueOf().toString(),
-	eq: compareDates,
+  parse: (v) => {
+    const ms = parseInt(v);
+    if (Number.isNaN(ms)) {
+      return null;
+    }
+    return new Date(ms);
+  },
+  serialize: (v: Date) => v.valueOf().toString(),
+  eq: compareDates,
 });
 
 /**
@@ -228,15 +228,15 @@ export const parseAsTimestamp = createParser({
  * and returned as a Date object.
  */
 export const parseAsIsoDateTime = createParser({
-	parse: (v) => {
-		const date = new Date(v);
-		if (Number.isNaN(date.valueOf())) {
-			return null;
-		}
-		return date;
-	},
-	serialize: (v: Date) => v.toISOString(),
-	eq: compareDates,
+  parse: (v) => {
+    const date = new Date(v);
+    if (Number.isNaN(date.valueOf())) {
+      return null;
+    }
+    return date;
+  },
+  serialize: (v: Date) => v.toISOString(),
+  eq: compareDates,
 });
 
 /**
@@ -248,15 +248,15 @@ export const parseAsIsoDateTime = createParser({
  * making it at 00:00:00 UTC.
  */
 export const parseAsIsoDate = createParser({
-	parse: (v) => {
-		const date = new Date(v.slice(0, 10));
-		if (Number.isNaN(date.valueOf())) {
-			return null;
-		}
-		return date;
-	},
-	serialize: (v: Date) => v.toISOString().slice(0, 10),
-	eq: compareDates,
+  parse: (v) => {
+    const date = new Date(v.slice(0, 10));
+    if (Number.isNaN(date.valueOf())) {
+      return null;
+    }
+    return date;
+  },
+  serialize: (v: Date) => v.toISOString().slice(0, 10),
+  eq: compareDates,
 });
 
 /**
@@ -287,16 +287,16 @@ export const parseAsIsoDate = createParser({
  * @param validValues The values you want to accept
  */
 export function parseAsStringEnum<Enum extends string>(validValues: Enum[]) {
-	return createParser({
-		parse: (query: string) => {
-			const asEnum = query as unknown as Enum;
-			if (validValues.includes(asEnum)) {
-				return asEnum;
-			}
-			return null;
-		},
-		serialize: (value: Enum) => value.toString(),
-	});
+  return createParser({
+    parse: (query: string) => {
+      const asEnum = query as unknown as Enum;
+      if (validValues.includes(asEnum)) {
+        return asEnum;
+      }
+      return null;
+    },
+    serialize: (value: Enum) => value.toString(),
+  });
 }
 
 /**
@@ -319,18 +319,18 @@ export function parseAsStringEnum<Enum extends string>(validValues: Enum[]) {
  * @param validValues The values you want to accept
  */
 export function parseAsStringLiteral<Literal extends string>(
-	validValues: readonly Literal[],
+  validValues: readonly Literal[]
 ) {
-	return createParser({
-		parse: (query: string) => {
-			const asConst = query as unknown as Literal;
-			if (validValues.includes(asConst)) {
-				return asConst;
-			}
-			return null;
-		},
-		serialize: (value: Literal) => value.toString(),
-	});
+  return createParser({
+    parse: (query: string) => {
+      const asConst = query as unknown as Literal;
+      if (validValues.includes(asConst)) {
+        return asConst;
+      }
+      return null;
+    },
+    serialize: (value: Literal) => value.toString(),
+  });
 }
 
 /**
@@ -353,18 +353,18 @@ export function parseAsStringLiteral<Literal extends string>(
  * @param validValues The values you want to accept
  */
 export function parseAsNumberLiteral<Literal extends number>(
-	validValues: readonly Literal[],
+  validValues: readonly Literal[]
 ) {
-	return createParser({
-		parse: (query: string) => {
-			const asConst = parseFloat(query) as unknown as Literal;
-			if (validValues.includes(asConst)) {
-				return asConst;
-			}
-			return null;
-		},
-		serialize: (value: Literal) => value.toString(),
-	});
+  return createParser({
+    parse: (query: string) => {
+      const asConst = parseFloat(query) as unknown as Literal;
+      if (validValues.includes(asConst)) {
+        return asConst;
+      }
+      return null;
+    },
+    serialize: (value: Literal) => value.toString(),
+  });
 }
 
 /**
@@ -375,21 +375,21 @@ export function parseAsNumberLiteral<Literal extends number>(
  * @param runtimeParser Runtime parser (eg: Zod schema) to validate after JSON.parse
  */
 export function parseAsJson<T>(runtimeParser: (value: unknown) => T) {
-	return createParser({
-		parse: (query) => {
-			try {
-				const obj = JSON.parse(query);
-				return runtimeParser(obj);
-			} catch {
-				return null;
-			}
-		},
-		serialize: (value) => JSON.stringify(value),
-		eq(a, b) {
-			// Check for referential equality first
-			return a === b || JSON.stringify(a) === JSON.stringify(b);
-		},
-	});
+  return createParser({
+    parse: (query) => {
+      try {
+        const obj = JSON.parse(query);
+        return runtimeParser(obj);
+      } catch {
+        return null;
+      }
+    },
+    serialize: (value) => JSON.stringify(value),
+    eq(a, b) {
+      // Check for referential equality first
+      return a === b || JSON.stringify(a) === JSON.stringify(b);
+    },
+  });
 }
 
 /**
@@ -400,63 +400,63 @@ export function parseAsJson<T>(runtimeParser: (value: unknown) => T) {
  * @param separator The character to use to separate items (default ',')
  */
 export function parseAsArrayOf<ItemType>(
-	itemParser: Parser<ItemType>,
-	separator = ",",
+  itemParser: Parser<ItemType>,
+  separator = ","
 ) {
-	const itemEq = itemParser.eq ?? ((a: ItemType, b: ItemType) => a === b);
-	const encodedSeparator = encodeURIComponent(separator);
-	// todo: Handle default item values and make return type non-nullable
-	return createParser({
-		parse: (query) => {
-			if (query === "") {
-				// Empty query should not go through the split/map/filter logic,
-				// see https://github.com/47ng/nuqs/issues/329
-				return [] as ItemType[];
-			}
-			return query
-				.split(separator)
-				.map((item, index) =>
-					safeParse(
-						itemParser.parse,
-						item.replaceAll(encodedSeparator, separator),
-						`[${index}]`,
-					),
-				)
-				.filter((value) => value !== null && value !== undefined) as ItemType[];
-		},
-		serialize: (values) =>
-			values
-				.map<string>((value) => {
-					const str = itemParser.serialize
-						? itemParser.serialize(value)
-						: String(value);
-					return str.replaceAll(separator, encodedSeparator);
-				})
-				.join(separator),
-		eq(a, b) {
-			if (a === b) {
-				return true; // Referentially stable
-			}
-			if (a.length !== b.length) {
-				return false;
-			}
-			return a.every((value, index) => itemEq(value, b[index]!));
-		},
-	});
+  const itemEq = itemParser.eq ?? ((a: ItemType, b: ItemType) => a === b);
+  const encodedSeparator = encodeURIComponent(separator);
+  // todo: Handle default item values and make return type non-nullable
+  return createParser({
+    parse: (query) => {
+      if (query === "") {
+        // Empty query should not go through the split/map/filter logic,
+        // see https://github.com/47ng/nuqs/issues/329
+        return [] as ItemType[];
+      }
+      return query
+        .split(separator)
+        .map((item, index) =>
+          safeParse(
+            itemParser.parse,
+            item.replaceAll(encodedSeparator, separator),
+            `[${index}]`
+          )
+        )
+        .filter((value) => value !== null && value !== undefined) as ItemType[];
+    },
+    serialize: (values) =>
+      values
+        .map<string>((value) => {
+          const str = itemParser.serialize
+            ? itemParser.serialize(value)
+            : String(value);
+          return str.replaceAll(separator, encodedSeparator);
+        })
+        .join(separator),
+    eq(a, b) {
+      if (a === b) {
+        return true; // Referentially stable
+      }
+      if (a.length !== b.length) {
+        return false;
+      }
+      return a.every((value, index) => itemEq(value, b[index]!));
+    },
+  });
 }
 
 type inferSingleParserType<Parser> = Parser extends ParserBuilder<
-	infer Value
+  infer Value
 > & {
-	defaultValue: infer Value;
+  defaultValue: infer Value;
 }
-	? Value
-	: Parser extends ParserBuilder<infer Value>
-		? Value | null
-		: never;
+  ? Value
+  : Parser extends ParserBuilder<infer Value>
+    ? Value | null
+    : never;
 
 type inferParserRecordType<Map extends Record<string, ParserBuilder<any>>> = {
-	[Key in keyof Map]: inferSingleParserType<Map[Key]>;
+  [Key in keyof Map]: inferSingleParserType<Map[Key]>;
 } & {};
 
 /**
@@ -483,13 +483,14 @@ type inferParserRecordType<Map extends Record<string, ParserBuilder<any>>> = {
  * // { a: number | null, b: boolean }
  * ```
  */
-export type inferParserType<Input> = Input extends ParserBuilder<any>
-	? inferSingleParserType<Input>
-	: Input extends Record<string, ParserBuilder<any>>
-		? inferParserRecordType<Input>
-		: never;
+export type inferParserType<Input> =
+  Input extends ParserBuilder<any>
+    ? inferSingleParserType<Input>
+    : Input extends Record<string, ParserBuilder<any>>
+      ? inferParserRecordType<Input>
+      : never;
 
 export type ParserWithOptionalDefault<T> = ParserBuilder<T> & {
-	defaultValue?: T;
+  defaultValue?: T;
 };
 export type ParserMap = Record<string, ParserWithOptionalDefault<any>>;

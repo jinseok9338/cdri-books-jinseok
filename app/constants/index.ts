@@ -1,14 +1,14 @@
-import { QueryClient } from "@tanstack/react-query";
+import z from "zod";
+
+const bookSearchQuerySchema = z.object({
+  query: z.string(),
+  sort: z.enum(["accuracy", "latest"]).optional(),
+  target: z.string(),
+});
 
 export const BOOK_SEARCH_QUERY = {
   key: "bsq",
-  defaultValue: {
-    query: "",
-    sort: "",
-    page: 1,
-    size: 10,
-    target: "",
-  },
+  schema: bookSearchQuerySchema,
 };
 
 export const CURRENT_PAGE_TAB = {

@@ -2,28 +2,39 @@ import React, { useState, useRef } from "react";
 import useRecentSearch from "~/stores/searchQueryStore";
 import searchIcon from "~/assets/icons/search.svg";
 import closeIcon from "~/assets/icons/close.svg";
+import { BOOK_SEARCH_QUERY } from "~/constants";
+import { useQueryState } from "~/lib/nuqs/useQueryState";
+import { parseAsJson } from "~/lib/nuqs/parsers";
 
-interface SearchInputProps {
-  onSearch: (query: string) => void;
-  placeholder?: string;
-}
+type BookSearchQuery = {
+  query: string;
+  sort: string;
+  page: number;
+  size: number;
+  target: string;
+};
 
-const SearchInput = ({
-  onSearch,
-  placeholder = "검색어를 입력하세요",
-}: SearchInputProps) => {
+const SearchInput = () => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [, setSearchQuery] = useQueryState(
+    BOOK_SEARCH_QUERY.key,
+    parseAsJson(BOOK_SEARCH_QUERY.schema.parse)
+  );
 
   const { recentSearch, addRecentSearch, removeRecentSearch } =
     useRecentSearch();
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
-      onSearch(query.trim());
+      setSearchQuery((prev) => ({
+        query: query.trim(),
+        sort: prev?.sort || "accuracy",
+        target: prev?.target || "",
+      }));
+      setInputValue("");
       addRecentSearch(query.trim());
-      // setInputValue("");
       if (inputRef.current) {
         inputRef.current.blur();
       }
@@ -72,7 +83,7 @@ const SearchInput = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
-            placeholder={placeholder}
+            placeholder="검색어를 입력하세요"
             className="flex-1 border-none outline-none bg-transparent text-[var(--color-typo-primary)] placeholder:text-[var(--color-typo-subtitle)] text-base"
           />
         </div>

@@ -7,8 +7,11 @@ import {
 import { Button } from "~/components/ui/button";
 import closeGrayIcon from "~/assets/icons/close-gray.svg";
 import arrowDownIcon from "~/assets/icons/arrow-down.svg";
+import { useQueryState } from "~/lib/nuqs/useQueryState";
+import { BOOK_SEARCH_QUERY } from "~/constants";
+import { parseAsJson } from "~/lib/nuqs/parsers";
 
-export type SearchTarget = "title" | "isbn" | "publisher" | "person";
+export type SearchTarget = "title" | "publisher" | "person";
 
 interface PopoverSearchFormProps {
   onSearch: (target: SearchTarget, query: string) => void;
@@ -16,9 +19,8 @@ interface PopoverSearchFormProps {
 
 const searchTargetOptions: { value: SearchTarget; label: string }[] = [
   { value: "title", label: "제목" },
-  { value: "isbn", label: "ISBN" },
+  { value: "person", label: "저자명" },
   { value: "publisher", label: "출판사" },
-  { value: "person", label: "저자" },
 ];
 
 const PopoverSearchForm = ({ onSearch }: PopoverSearchFormProps) => {
@@ -26,12 +28,22 @@ const PopoverSearchForm = ({ onSearch }: PopoverSearchFormProps) => {
   const [searchTarget, setSearchTarget] = useState<SearchTarget>("title");
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [, setBookSearchQuery] = useQueryState(
+    BOOK_SEARCH_QUERY.key,
+    parseAsJson(BOOK_SEARCH_QUERY.schema.parse)
+  );
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
       onSearch(searchTarget, searchQuery.trim());
-      setSearchQuery("");
+      setBookSearchQuery((prev) => ({
+        ...prev,
+        target: searchTarget,
+        query: searchQuery.trim(),
+      }));
       setIsOpen(false);
+      setSearchQuery("");
+      setSearchTarget("title");
     }
   };
 

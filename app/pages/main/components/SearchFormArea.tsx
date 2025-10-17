@@ -29,7 +29,7 @@ const SearchFormArea = () => {
       <div className="relative w-full">
         {/* 검색 입력창 */}
         <div className="w-[480px]">
-          <SearchInput onSearch={handleSearch} />
+          <SearchInput />
         </div>
 
         {/* 상세검색 버튼 */}
