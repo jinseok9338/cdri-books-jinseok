@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import useLikeBooksStore from "~/stores/likeBooksStore";
 import type { BookQueryResponse, Document } from "~/api";
 
-const LIKED_BOOKS_KEY = "likedBooks";
+export const LIKED_BOOKS_KEY = "likedBooks";
 const BOOKS_PER_PAGE = 10;
 
 export const useGetLikedBooks = () => {

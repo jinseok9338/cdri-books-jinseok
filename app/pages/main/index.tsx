@@ -1,10 +1,3 @@
-import React from "react";
-import { Title2 } from "~/components/typo";
-import SearchInput from "~/components/ui/SearchInput";
-import PopoverSearchForm, {
-  type SearchTarget,
-} from "~/components/ui/PopoverSearchForm";
-
 import Padding from "~/components/ui/padding";
 import SearchFormArea from "./components/SearchFormArea";
 import BookListArea from "./components/BookListArea";

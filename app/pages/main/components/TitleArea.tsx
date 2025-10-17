@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { GET_BOOKS_KEY } from "~/hooks/api/useGetBooks";
+import { GET_BOOKS_KEY, useGetInfiniteBooks } from "~/hooks/api/useGetBooks";
 import { BOOK_SEARCH_QUERY } from "~/constants";
 import { useQueryState } from "~/lib/nuqs/useQueryState";
 import { parseAsJson } from "~/lib/nuqs/parsers";
@@ -8,25 +8,16 @@ import { Body2 } from "~/components/typo";
 const TitleArea = () => {
   const [bookSearchQuery] = useQueryState(
     BOOK_SEARCH_QUERY.key,
-    parseAsJson(BOOK_SEARCH_QUERY.schema.parse).withDefault({
-      query: "",
-      target: "title",
-      sort: "accuracy",
-    })
+    parseAsJson(BOOK_SEARCH_QUERY.schema.parse)
   );
 
-  const queryClient = useQueryClient();
+  const { data } = useGetInfiniteBooks({
+    query: bookSearchQuery?.query || "",
+    target: bookSearchQuery?.target as "title" | "publisher" | "person",
+    sort: bookSearchQuery?.sort || "accuracy",
+  });
 
-  const queryData = queryClient.getQueryData([
-    GET_BOOKS_KEY,
-    {
-      query: bookSearchQuery.query,
-      target: bookSearchQuery.target,
-      sort: bookSearchQuery.sort,
-    },
-  ]) as any;
-
-  const totalCount = queryData?.pages?.[0]?.meta?.total_count || 0;
+  const totalCount = data?.pages?.[0]?.meta?.total_count || 0;
 
   return (
     <div className="flex items-center gap-4">

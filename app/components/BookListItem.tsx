@@ -8,12 +8,15 @@ import heartFilledIcon from "~/assets/icons/heart-filled.svg";
 import arrowDownIcon from "~/assets/icons/arrow-down.svg";
 import { formatPrice } from "~/lib/utils";
 import defaultThumbnail from "~/assets/images/noImage.png";
+import { useQueryClient } from "@tanstack/react-query";
+import { LIKED_BOOKS_KEY } from "~/hooks/useGetLikedBooks";
 interface BookListItemProps {
   book: Document;
 }
 
 const BookListItem = ({ book }: BookListItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const queryClient = useQueryClient();
   const { isLiked, addLikeBook, removeLikeBook } = useLikeBooksStore();
   const liked = isLiked(book);
 
@@ -24,6 +27,7 @@ const BookListItem = ({ book }: BookListItemProps) => {
     } else {
       addLikeBook(book);
     }
+    queryClient.invalidateQueries({ queryKey: [LIKED_BOOKS_KEY] });
   };
 
   const handleBuyClick = (e: React.MouseEvent) => {
