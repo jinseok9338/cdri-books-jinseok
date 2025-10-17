@@ -7,7 +7,7 @@ import heartEmptyIcon from "~/assets/icons/heart-empty.svg";
 import heartFilledIcon from "~/assets/icons/heart-filled.svg";
 import arrowDownIcon from "~/assets/icons/arrow-down.svg";
 import { formatPrice } from "~/lib/utils";
-
+import defaultThumbnail from "~/assets/images/noImage.png";
 interface BookListItemProps {
   book: Document;
 }
@@ -30,7 +30,7 @@ const BookListItem = ({ book }: BookListItemProps) => {
     window.open(book.url, "_blank");
   };
 
-  const thumbnailUrl = book.thumbnail;
+  const thumbnailUrl = book.thumbnail || defaultThumbnail;
 
   return (
     <div
@@ -39,7 +39,6 @@ const BookListItem = ({ book }: BookListItemProps) => {
       {!isExpanded ? (
         // 닫힘 상태 - CompactView
         <div className="flex items-center w-full h-[100px] px-12 py-4 gap-6 transition-all duration-300 ease-in-out">
-          {/* 책 이미지 */}
           <div className="relative">
             <img
               src={thumbnailUrl}

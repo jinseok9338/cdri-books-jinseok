@@ -21,6 +21,9 @@ const useRecentSearch = create<RecentSearchStore>()(
       recentSearch: [],
 
       addRecentSearch: (searchTerm: string) => {
+        if (searchTerm.trim() === "") {
+          return;
+        }
         set((state) => {
           let updatedRecentSearch = state.recentSearch.filter(
             (search) => search.searchTerm !== searchTerm

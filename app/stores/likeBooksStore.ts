@@ -11,7 +11,9 @@ interface LikeBooksStore {
 }
 
 const generateBookKey = (book: Document): string => {
-  return book.isbn;
+  // isbn 만으로는 unique 가 보장되지 않음
+  // book.url 을 추가로 사용
+  return `${book.isbn}-${book.url}`;
 };
 
 const useLikeBooksStore = create<LikeBooksStore>()(

@@ -13,9 +13,7 @@ import { parseAsJson } from "~/lib/nuqs/parsers";
 
 export type SearchTarget = "title" | "publisher" | "person";
 
-interface PopoverSearchFormProps {
-  onSearch: (target: SearchTarget, query: string) => void;
-}
+interface PopoverSearchFormProps {}
 
 const searchTargetOptions: { value: SearchTarget; label: string }[] = [
   { value: "title", label: "제목" },
@@ -23,7 +21,7 @@ const searchTargetOptions: { value: SearchTarget; label: string }[] = [
   { value: "publisher", label: "출판사" },
 ];
 
-const PopoverSearchForm = ({ onSearch }: PopoverSearchFormProps) => {
+const PopoverSearchForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTarget, setSearchTarget] = useState<SearchTarget>("title");
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,17 +32,14 @@ const PopoverSearchForm = ({ onSearch }: PopoverSearchFormProps) => {
   );
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      onSearch(searchTarget, searchQuery.trim());
-      setBookSearchQuery((prev) => ({
-        ...prev,
-        target: searchTarget,
-        query: searchQuery.trim(),
-      }));
-      setIsOpen(false);
-      setSearchQuery("");
-      setSearchTarget("title");
-    }
+    setBookSearchQuery((prev) => ({
+      ...prev,
+      target: searchTarget,
+      query: searchQuery.trim(),
+    }));
+    setIsOpen(false);
+    setSearchQuery("");
+    setSearchTarget("title");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

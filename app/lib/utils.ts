@@ -14,5 +14,9 @@ export const isClient = () => {
 };
 
 export const formatPrice = (price: number) => {
+  // -1 인 경우에는 0원
+  if (price === -1) {
+    return "0원";
+  }
   return `${price.toLocaleString()}원`;
 };

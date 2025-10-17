@@ -7,29 +7,28 @@ import { useQueryState } from "~/lib/nuqs/useQueryState";
 import { parseAsJson } from "~/lib/nuqs/parsers";
 
 const SearchInput = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [, setSearchQuery] = useQueryState(
+  const [bookSearchQuery, setBookSearchQuery] = useQueryState(
     BOOK_SEARCH_QUERY.key,
     parseAsJson(BOOK_SEARCH_QUERY.schema.parse)
   );
+
+  const [inputValue, setInputValue] = useState(bookSearchQuery?.query || "");
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { recentSearch, addRecentSearch, removeRecentSearch } =
     useRecentSearch();
 
   const handleSearch = (query: string) => {
-    if (query.trim()) {
-      setSearchQuery((prev) => ({
-        query: query.trim(),
-        sort: prev?.sort || "accuracy",
-        target: prev?.target || "",
-      }));
-      setInputValue("");
-      addRecentSearch(query.trim());
-      if (inputRef.current) {
-        inputRef.current.blur();
-      }
+    setBookSearchQuery((prev) => ({
+      query: query.trim(),
+      sort: prev?.sort || "accuracy",
+      target: prev?.target || "",
+    }));
+    setInputValue("");
+    addRecentSearch(query.trim());
+    if (inputRef.current) {
+      inputRef.current.blur();
     }
   };
 

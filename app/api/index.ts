@@ -38,17 +38,13 @@ export interface BookQueryResponse {
 export const searchBooks = async (
   searchQuery: z.infer<typeof searchBooksSchema>
 ) => {
-  const { success, data: validatedQuery } =
-    searchBooksSchema.safeParse(searchQuery);
-  if (!success) {
-    throw new Error("Invalid search query");
-  }
   try {
     const response = await API.get("search/book", {
       searchParams: {
-        ...validatedQuery,
+        ...searchQuery,
       },
     });
+
     const data = await response.json();
     return data as BookQueryResponse;
   } catch (error) {

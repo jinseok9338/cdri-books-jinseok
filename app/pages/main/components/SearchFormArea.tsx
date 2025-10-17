@@ -6,16 +6,6 @@ import PopoverSearchForm, {
 } from "~/components/ui/PopoverSearchForm";
 
 const SearchFormArea = () => {
-  const handleSearch = (query: string) => {
-    console.log("검색어:", query);
-    // TODO: 검색 로직 구현
-  };
-
-  const handleDetailSearch = (target: SearchTarget, query: string) => {
-    console.log("상세검색:", target, query);
-    // TODO: 상세 검색 로직 구현
-  };
-
   return (
     <div className="w-full max-w-[568px] flex flex-col gap-4">
       <div className="h-[36px] flex items-center">
@@ -28,7 +18,7 @@ const SearchFormArea = () => {
         <div className="flex-1">
           <SearchInput />
         </div>
-        <PopoverSearchForm onSearch={handleDetailSearch} />
+        <PopoverSearchForm />
       </div>
     </div>
   );
