@@ -1,7 +1,7 @@
-import BookListItem from "~/components/BookListItem";
-import BookListSkeleton from "~/components/BookListSkeleton";
 import { Loader2 } from "lucide-react";
 import NoBooksImage from "~/assets/images/NoBooks.png";
+import BookListItem from "~/components/BookListItem";
+import BookListSkeleton from "~/components/BookListSkeleton";
 
 import InfiniteScroll from "react-infinite-scroller";
 import { Caption } from "~/components/typo";

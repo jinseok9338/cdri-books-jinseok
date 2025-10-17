@@ -1,6 +1,6 @@
 import Padding from "~/components/ui/padding";
-import SearchFormArea from "./components/SearchFormArea";
 import BookListArea from "./components/BookListArea";
+import SearchFormArea from "./components/SearchFormArea";
 import TitleArea from "./components/TitleArea";
 
 const MainIndexPage = () => {

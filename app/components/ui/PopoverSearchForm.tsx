@@ -1,19 +1,17 @@
 import React, { useState } from "react";
+import arrowDownIcon from "~/assets/icons/arrow-down.svg";
+import closeGrayIcon from "~/assets/icons/close-gray.svg";
+import { Button } from "~/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { Button } from "~/components/ui/button";
-import closeGrayIcon from "~/assets/icons/close-gray.svg";
-import arrowDownIcon from "~/assets/icons/arrow-down.svg";
-import { useQueryState } from "~/lib/nuqs/useQueryState";
 import { BOOK_SEARCH_QUERY } from "~/constants";
 import { parseAsJson } from "~/lib/nuqs/parsers";
+import { useQueryState } from "~/lib/nuqs/useQueryState";
 
 export type SearchTarget = "title" | "publisher" | "person";
-
-interface PopoverSearchFormProps {}
 
 const searchTargetOptions: { value: SearchTarget; label: string }[] = [
   { value: "title", label: "제목" },

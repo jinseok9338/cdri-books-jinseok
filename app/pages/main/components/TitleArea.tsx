@@ -1,9 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { GET_BOOKS_KEY, useGetInfiniteBooks } from "~/hooks/api/useGetBooks";
-import { BOOK_SEARCH_QUERY } from "~/constants";
-import { useQueryState } from "~/lib/nuqs/useQueryState";
-import { parseAsJson } from "~/lib/nuqs/parsers";
 import { Body2 } from "~/components/typo";
+import { BOOK_SEARCH_QUERY } from "~/constants";
+import { useGetInfiniteBooks } from "~/hooks/api/useGetBooks";
+import { parseAsJson } from "~/lib/nuqs/parsers";
+import { useQueryState } from "~/lib/nuqs/useQueryState";
 
 const TitleArea = () => {
   const [bookSearchQuery] = useQueryState(

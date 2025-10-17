@@ -1,7 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
-
 import { Body2 } from "~/components/typo";
-import { LIKED_BOOKS_KEY, useGetLikedBooks } from "~/hooks/useGetLikedBooks";
+import { useGetLikedBooks } from "~/hooks/useGetLikedBooks";
 
 const LikedBooksTitleArea = () => {
   const { data } = useGetLikedBooks();

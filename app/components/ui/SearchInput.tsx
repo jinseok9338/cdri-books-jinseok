@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
-import useRecentSearch from "~/stores/searchQueryStore";
-import searchIcon from "~/assets/icons/search.svg";
+import React, { useRef, useState } from "react";
 import closeIcon from "~/assets/icons/close.svg";
+import searchIcon from "~/assets/icons/search.svg";
 import { BOOK_SEARCH_QUERY } from "~/constants";
-import { useQueryState } from "~/lib/nuqs/useQueryState";
 import { parseAsJson } from "~/lib/nuqs/parsers";
+import { useQueryState } from "~/lib/nuqs/useQueryState";
+import useRecentSearch from "~/stores/searchQueryStore";
 
 const SearchInput = () => {
   const [bookSearchQuery, setBookSearchQuery] = useQueryState(

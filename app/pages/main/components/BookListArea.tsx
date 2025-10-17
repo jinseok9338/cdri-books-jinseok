@@ -1,11 +1,11 @@
+import { Loader2 } from "lucide-react";
+import NoBooksImage from "~/assets/images/NoBooks.png";
+import BookListItem from "~/components/BookListItem";
+import BookListSkeleton from "~/components/BookListSkeleton";
 import { BOOK_SEARCH_QUERY } from "~/constants";
 import { useGetInfiniteBooks } from "~/hooks/api/useGetBooks";
 import { parseAsJson } from "~/lib/nuqs/parsers";
 import { useQueryState } from "~/lib/nuqs/useQueryState";
-import BookListItem from "~/components/BookListItem";
-import BookListSkeleton from "~/components/BookListSkeleton";
-import { Loader2 } from "lucide-react";
-import NoBooksImage from "~/assets/images/NoBooks.png";
 
 import InfiniteScroll from "react-infinite-scroller";
 import { Caption } from "~/components/typo";

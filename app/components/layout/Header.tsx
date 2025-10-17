@@ -1,6 +1,5 @@
-import React from "react";
 import { Link, useLocation } from "react-router";
-import { Title1, Body1 } from "~/components/typo";
+import { Body1, Title1 } from "~/components/typo";
 
 const Header = () => {
   const location = useLocation();
