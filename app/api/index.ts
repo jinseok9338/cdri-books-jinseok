@@ -1,6 +1,16 @@
 import API from "~/lib/ky";
 import z from "zod";
 
+export class BookSearchError extends Error {
+  constructor(
+    message: string,
+    public originalError?: unknown
+  ) {
+    super(message);
+    this.name = "BookSearchError";
+  }
+}
+
 export const searchBooksSchema = z.object({
   query: z.string(),
   sort: z.enum(["accuracy", "latest"]).optional(),
@@ -48,7 +58,10 @@ export const searchBooks = async (
     const data = await response.json();
     return data as BookQueryResponse;
   } catch (error) {
-    console.error(error);
-    throw error;
+    console.error("Failed to search books:", error);
+    throw new BookSearchError(
+      "도서 검색에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      error
+    );
   }
 };

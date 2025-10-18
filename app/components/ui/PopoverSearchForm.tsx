@@ -67,6 +67,7 @@ const PopoverSearchForm = () => {
         <div className="relative bg-white rounded-lg shadow-lg p-6">
           <button
             onClick={handleClose}
+            aria-label="상세검색 닫기"
             className="absolute top-2 right-2 w-5 h-5 hover:opacity-70"
           >
             <img src={closeGrayIcon} alt="close" className="w-full h-full" />

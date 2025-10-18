@@ -47,6 +47,10 @@ const BookListItem = ({ book }: BookListItemProps) => {
             <img
               src={thumbnailUrl}
               alt={book.title}
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.src = defaultThumbnail;
+              }}
               className="w-12 h-[68px] object-cover rounded"
             />
 
@@ -82,6 +86,7 @@ const BookListItem = ({ book }: BookListItemProps) => {
             </Button>
             <button
               onClick={() => setIsExpanded(true)}
+              aria-label="상세 정보 보기"
               className="w-[115px] h-12 bg-[var(--color-light-gray)] text-[var(--color-typo-secondary)] rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200"
             >
               <Caption>상세보기</Caption>
@@ -99,10 +104,15 @@ const BookListItem = ({ book }: BookListItemProps) => {
                 <img
                   src={thumbnailUrl}
                   alt={book.title}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = defaultThumbnail;
+                  }}
                   className="w-[210px] h-[280px] object-cover rounded"
                 />
                 <button
                   onClick={handleLikeClick}
+                  aria-label={liked ? "찜하기 취소" : "찜하기"}
                   className="absolute top-2 right-2 w-6 h-6 hover:scale-110 transition-transform"
                 >
                   <img
@@ -143,6 +153,7 @@ const BookListItem = ({ book }: BookListItemProps) => {
               <div className="flex justify-end mb-6">
                 <button
                   onClick={() => setIsExpanded(false)}
+                  aria-label="상세 정보 닫기"
                   className="w-[115px] h-12 bg-[var(--color-light-gray)] text-[var(--color-typo-secondary)] rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200"
                 >
                   <Caption>상세보기</Caption>

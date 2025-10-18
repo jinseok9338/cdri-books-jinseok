@@ -3,6 +3,12 @@ import { getENV } from "./utils";
 const BASE_URL = "https://dapi.kakao.com/v3";
 const KAKAO_API_KEY = getENV("VITE_KAKAO_API_KEY");
 
+if (!KAKAO_API_KEY) {
+  throw new Error(
+    "VITE_KAKAO_API_KEY is not defined. Please check your .env file."
+  );
+}
+
 const API = ky.create({
   prefixUrl: BASE_URL,
   hooks: {

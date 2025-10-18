@@ -33,8 +33,25 @@ const BookListArea = () => {
   // 에러 처리
   if (isError) {
     return (
-      <div className="w-full text-center py-8">
-        <p className="text-red-500">검색 중 오류가 발생했습니다.</p>
+      <div className="w-full max-w-[960px] flex flex-col items-center justify-center py-20">
+        <div className="flex flex-col items-center gap-6">
+          <img
+            src={NoBooksImage}
+            alt="오류"
+            className="w-[80px] h-[80px] object-contain"
+          />
+          <div className="text-center space-y-2">
+            <Caption className="text-[var(--color-typo-primary)]">
+              검색 중 오류가 발생했습니다
+            </Caption>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-[var(--color-primary)] text-sm underline hover:opacity-80"
+            >
+              새로고침
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

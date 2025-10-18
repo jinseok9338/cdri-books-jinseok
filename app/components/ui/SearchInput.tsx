@@ -83,9 +83,17 @@ const SearchInput = () => {
             {recentSearch.map((item) => (
               <div
                 key={item.timestamp}
+                role="button"
+                tabIndex={0}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => handleHistoryClick(item.searchTerm)}
-                className="flex pl-[35px] pr-[9px] items-center justify-between text-[var(--color-typo-subtitle)] cursor-pointer hover:text-[var(--color-typo-primary)]"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleHistoryClick(item.searchTerm);
+                  }
+                }}
+                className="flex pl-[35px] pr-[9px] items-center justify-between text-[var(--color-typo-subtitle)] cursor-pointer hover:text-[var(--color-typo-primary)] focus:outline-none focus:text-[var(--color-typo-primary)]"
               >
                 <span className="text-base">{item.searchTerm}</span>
                 <button
